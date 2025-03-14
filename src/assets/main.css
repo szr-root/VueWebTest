@@ -54,9 +54,19 @@ body,
 }
 
 
+
+/*----------------去掉标签页外边距--------------------------*/
+.el-tabs .el-tabs__header{
+	margin: 0;
+}
+.el-tabs .el-tabs__item{
+		padding: 8px;
+	}
+
+
 /*----------------虚拟进度条样式--------------------------*/
 #nprogress .bar {
-    background: var(--primary-color-line) !important;
+    background: var(--el-color-primary) !important;
     height: 5px;
 }
 

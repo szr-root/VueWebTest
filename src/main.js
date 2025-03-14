@@ -1,7 +1,9 @@
 import './assets/main.css'
+import 'nprogress/nprogress.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import  piniaPluginPersist from 'pinia-plugin-persist'
 
 import App from './App.vue'
 import router from './router'
@@ -27,7 +29,11 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-app.use(createPinia())
+const upinia = createPinia()
+// pinia 注册持久化插件
+upinia.use(piniaPluginPersist)
+
+app.use(upinia)
 app.use(router)
 app.use(ElementPlus)
 

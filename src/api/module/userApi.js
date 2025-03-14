@@ -7,13 +7,13 @@ export default {
 		return request.post('/api/users/login',data)
 	},
 	//注册
-	register(data){
+	registerApi(data){
 		return request.post('/api/users/register',data)
 	},
-	verifyToken(data){
+	verifyTokenApi(data){
 		return request.post('/api/users/verify',data)
 	},
-	refreshToken(data){
+	refreshTokenApi(data){
 		return request.post('/api/users/refresh',data)
 	}
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {UserStore} from '@/stores/UserStore'
 
 //创建axios请求对象
 const request = axios.create({
@@ -20,8 +21,20 @@ const request = axios.create({
 
 // 添加请求拦截器
 request.interceptors.request.use(function (config) {
-    // 在发送请求之前做些什么
-    return config;
+    // 判断当前请求接口是否需要权限校验，本地是否有token，如果需要则添加token
+		if(config.url == '/api/users/login' || config.url == '/api/users/register'||
+			 config.url == '/api/users/verify' || config.url == '/api/users/refresh')	
+    {return config}
+		
+		const uStore = UserStore()
+		if(uStore.token){
+			config.headers['Authorization'] = 'Bearer ' + uStore.token
+		}else{
+			uStore.$reset()
+			window.location.href = '/'
+		}
+		console.log(config)
+		return config
   }, function (error) {
     // 对请求错误做些什么
     return Promise.reject(error);

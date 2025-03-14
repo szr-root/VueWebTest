@@ -26,6 +26,8 @@
 				    <el-form-item>
 				      <el-button :disabled='canClick' type="primary"  @click="LoginSubmit(loginFormRef)" style="width: 100%;">登 录</el-button>
 				    </el-form-item>
+					
+					<el-link @click="router.push('register')" type="primary">没有账号？点击注册</el-link>
 				  </el-form>
 			</div>
 		</div>
@@ -33,12 +35,17 @@
 </template>
 
 <script setup>
-	import {reactive,computed,ref} from 'vue'
+	import {reactive,computed,ref,onBeforeMount} from 'vue'
 	import http from '@/api/index'
 	import { ElNotification,ElMessage} from 'element-plus'
 	import {useRouter} from 'vue-router'
+	import {UserStore} from '@/stores/UserStore'
 	
+	//创建路由对象
 	const router = useRouter()
+	
+	//创建用户store对象
+	const uStore = UserStore()
 	
 	const loginForm = reactive({
 		username:"",
@@ -73,27 +80,43 @@
 				const response = await http.user.loginApi(loginForm)
 				if(response.status === 200){
 					  ElNotification({
-					    title: 'Success',
-					    message: '登录成功',
+					    title: '登录成功',
+					    message: '您已登录成功，进入首页',
 					    type: 'success',
+						duration: 3000,
 					  })
 					  //保存用户token和用户信息
-					  
-					  
-					  
+					  uStore.token = response.data.token
+					  uStore.userinfo = response.data.user
+					  // 修改认证状态
+					  if(loginForm.status){
+						  uStore.isAuthenticated = true
+					  }
 					  // 跳转到home页面
 					  router.push({name:"home"})
 					}else{
 						ElMessage({
 							message: response.data.detail,
-							type: 'error'
+							type: 'error',
+							duration: 3000,
 						})
 					}
 			}
 		})
-		
-
 	}
+	
+	// 如果登录过，有用户信息，直接跳转首页
+	onBeforeMount(()=>{
+		if(uStore.isAuthenticated && uStore.token){
+			ElMessage({
+				message: '已登录，2s后跳转首页',
+				type: 'info'
+			})
+			setTimeout(()=>{
+				router.push('home')
+			},2000)
+		}
+	})
 	
 </script>
 
