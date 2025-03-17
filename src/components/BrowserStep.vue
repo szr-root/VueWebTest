@@ -1,0 +1,88 @@
+<template>
+  <div class="browser_box">
+    <div class="title">
+      <el-icon size="20" color="var(--el-color-primary)">
+        <ChromeFilled/>
+      </el-icon>
+      <b>操作选项</b>
+    </div>
+
+    <!--    操作选项-->
+    <div class="main">
+      <el-collapse v-model="activeName">
+        <el-collapse-item :name="groupItem.groupId" :key="groupItem.groupId" v-for="(groupItem,index) in BrowserAction">
+          <template #title>
+            <el-link :icon="groupItem.groupIcon" :underline="false">{{groupItem.name}}</el-link>
+          </template>
+          <div class="card_info" v-for="(item,index) in groupItem.items" :key="index">
+            <span>{{item.keyword}}</span>
+            <el-icon>
+              <CirclePlus/>
+            </el-icon>
+          </div>
+
+        </el-collapse-item>
+
+      </el-collapse>
+    </div>
+  </div>
+
+</template>
+
+<script setup>
+import BrowserAction from '@/datas/BrowserAction.js'
+import {ref,reactive} from 'vue'
+
+const activeName = ref(['1'])
+
+</script>
+
+<style scoped lang="scss">
+
+.browser_box {
+  height: calc(100vh - 140px);
+  box-shadow: 0 0 5px var(--el-color-info);
+  border-radius: 10px;
+  margin: 5px 5px;
+
+  .title {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    b {
+      font: bold 14px/40px '微软雅黑';
+      color: var(--el-color-info);
+      margin-left: 5px;
+    }
+  }
+
+  .main {
+    padding: 0 10px;
+  }
+
+  .card_info {
+    box-shadow: inset 0 0 2px var(--el-color-info);
+    border-radius: 5px;
+    height: 22px;
+    margin: 8px 5px 0 8px;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      font-size: 12px;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+
+  .card_info:hover {
+    color: var(--el-color-primary);
+    cursor: move;
+  }
+}
+
+</style>

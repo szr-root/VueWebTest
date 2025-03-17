@@ -13,5 +13,10 @@ export default {
 
     copyCase(id){
         return request.post(`/api/test/cases/${id}/`)
-    }
+    },
+
+    //添加用例
+    createCase(params) {
+        return request.post(`/api/test/cases/`, params)
+    },
 }
