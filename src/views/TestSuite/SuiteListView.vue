@@ -1,7 +1,7 @@
 <template>
   <PageCard>
     <template #title>
-      <el-button @click="$router.push({name:'addCase'})" icon="Plus" type="primary">新增套件</el-button>
+      <el-button @click="$router.push({name:'addSuites'})" icon="Plus" type="primary">新增套件</el-button>
     </template>
 
     <template #main>
@@ -14,7 +14,7 @@
         <el-table-column prop="name" label="套件名称" show-overflow-tooltip/>
         <el-table-column prop="suite_type" label="套件类型" show-overflow-tooltip/>
         <el-table-column prop="modules" label="所属模块" show-overflow-tooltip/>
-        <el-table-column prop="case_count" label="用例数量" show-overflow-tooltip/>
+        <el-table-column prop="case_count" label="用例数量"/>
         <el-table-column prop="suite_setup_step" label="前置步骤数"/>
          <el-table-column prop="run_count" label="历史执行次数"/>
         >
@@ -22,9 +22,9 @@
           <template #default="scope">
             <el-button icon="Promotion" type="primary">运行</el-button>
             <el-button @click="editEnv(scope.row)" icon="View" plain>执行记录</el-button>
-            <el-button @click="$router.push({name:'editCase',params:{id:scope.row.id}})" icon="Edit" plain>编辑
+            <el-button @click="$router.push({name:'editSuites',params:{id:scope.row.id}})" icon="Edit" plain>编辑
             </el-button>
-            <el-button @click="deleteCase(scope.row.id)" icon="Delete" type="danger" plain>删除</el-button>
+            <el-button @click="deleteSuite(scope.row.id)" icon="Delete" type="danger" plain>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,57 +84,24 @@ getSuiteList()
 
 
 //删除用例
-function deleteCase(id) {
-  ElMessageBox.confirm('此操作将永久删除该用例, 是否继续?', '提示', {
+function deleteSuite(id) {
+  ElMessageBox.confirm('此操作将永久删除该套件, 是否继续?', '提示', {
     confirmButtonText: '确 定',
     cancelButtonText: '取 消',
     type: 'warning',
   })
       .then(async () => {
-        const resposne = await http.testcase.deleteCase(id)
+        const resposne = await http.testcase.deleteSuite(id)
         if (resposne.status === 204) {
           ElMessage({
             type: 'success',
-            message: `删除成功`,
+            message: `套件删除成功`,
           })
-          getCaseeList()
+          getSuiteList()
         }
       })
 }
 
-
-//编辑用例
-function editEnv(env) {
-  title.value = '编辑环境'
-  dialogFormVisible.value = true
-  EnvForm.id = env.id
-  EnvForm.name = env.name
-  EnvForm.host = env.host
-  EnvForm.global_vars = env.global_vars
-}
-
-async function updateEnv() {
-  const params = {
-    name: EnvForm.name,
-    host: EnvForm.host,
-    global_vars: JSON.parse(EnvForm.global_vars),
-  }
-
-  const response = await http.project.updateEnv(EnvForm.id, params)
-  if (response.status === 200) {
-    ElMessage({
-      type: 'success',
-      message: `修改成功`,
-    })
-    dialogFormVisible.value = false
-    pstore.getEnvList()
-  } else {
-    ElMessage({
-      type: 'error',
-      message: `修改失败`,
-    })
-  }
-}
 
 </script>
 

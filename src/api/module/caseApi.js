@@ -36,4 +36,20 @@ export default {
             params: params
         })
     },
+
+    deleteSuite(id) {
+        return request.delete(`/api/test/suites/${id}/`)
+    },
+
+    createSuite(params) {
+        return request.post(`/api/test/suites/`, params)
+    },
+
+    getSuiteDetail(id) {
+        return request.get(`/api/test/suites/${id}/`)
+    },
+
+    updateSuite(id, params){
+        return request.put(`/api/test/suites/${id}/`, params)
+    },
 }

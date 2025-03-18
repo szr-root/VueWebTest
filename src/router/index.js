@@ -88,6 +88,25 @@ const router = createRouter({
 					}
 				},
 				{
+					path: '/suite/add',
+					name: 'addSuites',//添加测试套件页
+					component: () => import('../views/TestSuite/AddSuite.vue'),
+					meta:{
+						name:"创建套件",
+						iconImg: new URL('@/assets/icon2/biz-test-o.png',import.meta.url).href
+					}
+				},
+				{
+					path: '/suite/edit/:id',
+					name: 'editSuites',//编辑测试套件页
+					component: () => import('../views/TestSuite/EditSuite.vue'),
+					meta:{
+						name:"编辑套件",
+						iconImg: new URL('@/assets/icon2/zhihangjilu.png',import.meta.url).href
+					}
+				},
+
+				{
 					path: '/plan/task',
 					name: 'task',//任务列表页
 					component: () => import('../views/TestTask/TestTaskView.vue'),
