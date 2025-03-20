@@ -9,8 +9,9 @@
           ghost-class="ghost"
           :group="{name:'case',pull:false,put:true}"
           handle=".sort_hand"
-          @sort="updateSort"
           @add="handleAdd"
+          @update="updateSort"
+
       >
         <template #item="{element}">
           <div class="line">
@@ -51,7 +52,7 @@ import {ElMessage, ElMessageBox} from "element-plus";
 
 const props = defineProps({
   suiteId: {
-    type: Number,
+    type: String,
     default: 0
   }
 })
@@ -93,7 +94,9 @@ async function updateSkip(id) {
 }
 
 async function updateSort(event) {
-  SuiteCaseSort(data)
+  // console.log('sort', event)
+  SuiteCaseSort()
+
 }
 
 
@@ -117,6 +120,7 @@ async function SuiteCaseSort() {
 
 
 async function handleAdd(event) {
+  // console.log('add', event)
   const data = {
     cases_id: event.item._underlying_vm_.cases_id,
     sort: event.newIndex,
@@ -130,6 +134,7 @@ async function handleAdd(event) {
     })
     //对用例进行排序
     suiteCaseList.value[event.newIndex].id = response.data.id
+    console.log('add', suiteCaseList.value)
     SuiteCaseSort()
   }
 }

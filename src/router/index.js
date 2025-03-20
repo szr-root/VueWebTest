@@ -120,7 +120,7 @@ const router = createRouter({
 					name: 'editTask',//编辑任务
 					component: () => import('../views/TestTask/EditTaskView.vue'),
 					meta:{
-						name:"任务列表",
+						name:"编辑任务",
 						iconImg: new URL('@/assets/icon2/zhihangjilu.png',import.meta.url).href
 					}
 				},
