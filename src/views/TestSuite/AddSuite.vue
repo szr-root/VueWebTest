@@ -45,6 +45,7 @@
         <el-button plain icon="CircleCloseFilled" @click="back">取 消</el-button>
       </template>
 
+
     </PageCard>
 
   </el-container>
@@ -76,11 +77,11 @@ const suiteInfo = reactive({
 })
 
 async function createCase() {
-  const response = await http.testcase.createCase(suiteInfo)
+  const response = await http.testcase.createSuite(suiteInfo)
   if (response.status === 201) {
     ElMessage({
       type: 'success',
-      message: `用例创建成功`,
+      message: `套件创建成功`,
     })
     back()
   }

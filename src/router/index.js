@@ -116,6 +116,16 @@ const router = createRouter({
 					}
 				},
 				{
+					path: '/plan/edit/:id',
+					name: 'editTask',//编辑任务
+					component: () => import('../views/TestTask/EditTaskView.vue'),
+					meta:{
+						name:"任务列表",
+						iconImg: new URL('@/assets/icon2/zhihangjilu.png',import.meta.url).href
+					}
+				},
+
+				{
 					path: '/plan/corn',
 					name: 'corn',//定时任务页
 					component: () => import('../views/CornTab/CornTabView.vue'),

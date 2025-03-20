@@ -21,7 +21,8 @@
           <template #default="scope">
             <el-button icon="Promotion" type="primary">运行</el-button>
             <el-button @click="editEnv(scope.row)" icon="View" plain>执行记录</el-button>
-            <el-button @click="$router.push({name:'editCase',params:{id:scope.row.id}})" icon="Edit" plain>编辑</el-button>
+            <el-button @click="$router.push({name:'editCase',params:{id:scope.row.id}})" icon="Edit" plain>编辑
+            </el-button>
             <el-button @click="copyCase(scope.row.id)" icon="DocumentCopy" plain>复制</el-button>
             <el-button @click="deleteCase(scope.row.id)" icon="Delete" type="danger" plain>删除</el-button>
           </template>
@@ -30,17 +31,17 @@
     </template>
 
     <template #bottom>
-
+      <el-pagination
+          v-model:current-page="pageConfig.page"
+          v-model:page-size="pageConfig.size"
+          :page-sizes="[5, 10, 20, 50]"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageConfig.total"
+          @size-change="getCaseeList"
+          @current-change="getCaseeList"
+      />
     </template>
-    <el-pagination
-        v-model:current-page="pageConfig.page"
-        v-model:page-size="pageConfig.size"
-        :page-sizes="[5, 10, 20, 50]"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageConfig.total"
-        @size-change="getCaseeList"
-        @current-change="getCaseeList"
-    />
+
 
   </PageCard>
 

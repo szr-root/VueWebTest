@@ -16,7 +16,7 @@
         <el-table-column prop="modules" label="所属模块" show-overflow-tooltip/>
         <el-table-column prop="case_count" label="用例数量"/>
         <el-table-column prop="suite_setup_step" label="前置步骤数"/>
-         <el-table-column prop="run_count" label="历史执行次数"/>
+        <el-table-column prop="run_count" label="历史执行次数"/>
         >
         <el-table-column label="操作" width="510px">
           <template #default="scope">
@@ -31,17 +31,17 @@
     </template>
 
     <template #bottom>
-
+      <el-pagination
+          v-model:current-page="pageConfig.page"
+          v-model:page-size="pageConfig.size"
+          :page-sizes="[5, 10, 20, 50]"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageConfig.total"
+          @size-change="getSuiteList"
+          @current-change="getSuiteList"
+      />
     </template>
-    <el-pagination
-        v-model:current-page="pageConfig.page"
-        v-model:page-size="pageConfig.size"
-        :page-sizes="[5, 10, 20, 50]"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pageConfig.total"
-        @size-change="getSuiteList"
-        @current-change="getSuiteList"
-    />
+
 
   </PageCard>
 
