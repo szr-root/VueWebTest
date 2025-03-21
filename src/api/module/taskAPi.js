@@ -38,4 +38,30 @@ export default {
     addTaskSuite(id, params) {
         return request.post(`/api/plan/tasks/${id}/suite/`, params)
     },
+
+
+    //================== 定时任务相关 ==================
+
+    getCronList(project){
+        return request.get('/api/cron/crontab',{
+            params:{
+                project:project
+            }
+        })
+    },
+
+    createCron(params){
+        return request.post('/api/cron/crontab/',params)
+    },
+
+    updateCronStatus(id){
+        return request.patch(`/api/cron/crontab/${id}`)
+    },
+
+    updateCronConfig(id,params){
+        return request.put(`/api/cron/crontab/${id}`,params)
+    },
+    deleteCron(id){
+        return request.delete(`/api/cron/crontab/${id}`)
+    },
 }

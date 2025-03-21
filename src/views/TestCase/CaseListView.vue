@@ -19,7 +19,7 @@
         >
         <el-table-column label="操作" width="510px">
           <template #default="scope">
-            <el-button icon="Promotion" type="primary">运行</el-button>
+            <el-button icon="Promotion" type="primary" @click="clickRun(scope.row.id)">运行</el-button>
             <el-button @click="editEnv(scope.row)" icon="View" plain>执行记录</el-button>
             <el-button @click="$router.push({name:'editCase',params:{id:scope.row.id}})" icon="Edit" plain>编辑
             </el-button>
@@ -42,9 +42,33 @@
       />
     </template>
 
-
   </PageCard>
+  <el-dialog v-model="showRunDlg" title="运行用例" width="500" center>
+    <el-form :model="runParams">
+      <el-form-item label="测试环境" :label-width="formLabelWidth">
+        <el-select v-model="runParams.env_id" placeholder="选择运行的环境">
+          <el-option v-for="env in pstore.envList" :label="env.name" :value="env.id" :key="env.id"/>
+        </el-select>
+      </el-form-item>
 
+      <el-form-item label="测试环境" :label-width="formLabelWidth">
+        <el-select v-model="runParams.browser_type" placeholder="选择浏览器">
+          <el-option label="chromium" value="chromium"/>
+          <el-option label="firebox" value="firebox"/>
+          <el-option label="webkit" value="webkit"/>
+        </el-select>
+      </el-form-item>
+
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showRunDlg = false">取 消</el-button>
+        <el-button type="primary" @click="runCase">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 
 </template>
 
@@ -154,6 +178,40 @@ async function updateEnv() {
     })
   }
 }
+
+//====================== 运行用例 ======================
+const showRunDlg = ref(false)
+const runParams = ref({
+  env_id: null,
+  browser_type: "chromium",
+  case_id: 1,
+})
+
+function clickRun(case_id) {
+  showRunDlg.value = true
+  runParams.value.case_id = case_id
+}
+
+
+async function runCase() {
+  const params = {
+    env_id: runParams.value.env_id,
+    browser_type: runParams.value.browser_type,
+  }
+  const response = await http.run.runCase(runParams.value.case_id, params)
+  if (response.status === 200) {
+    ElMessage({
+      type: 'success',
+      message: `用例已添加到执行队列中，准备开始执行用例`,
+    })
+  } else {
+    ElMessage({
+      type: 'error',
+      message: `启动执行失败`,
+    })
+  }
+}
+
 
 </script>
 

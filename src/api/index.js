@@ -2,6 +2,8 @@ import userApi from '@/api/module/userApi'
 import projectApi from '@/api/module/projectApi'
 import testApi from '@/api/module/caseApi'
 import task from '@/api/module/taskAPi.js'
+import record from '@/api/module/recordAPi.js'
+import run from '@/api/module/runAPi.js'
 
 
 export default {
@@ -13,4 +15,8 @@ export default {
 	testcase:testApi,
 	//任务接口
 	task:task,
+	//记录相关接口
+	record:record,
+	//运行接口
+	run:run
 }
