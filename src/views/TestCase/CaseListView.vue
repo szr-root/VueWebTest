@@ -70,6 +70,11 @@
     </template>
   </el-dialog>
 
+<!--  用例执行记录弹窗-->
+  <el-dialog v-model="runRecordDlg" title="用例运行记录" width="80%" center>
+
+  </el-dialog>
+
 </template>
 
 <script setup>
@@ -202,7 +207,7 @@ async function runCase() {
   if (response.status === 200) {
     ElMessage({
       type: 'success',
-      message: `用例已添加到执行队列中，准备开始执行用例`,
+      message: response.data.msg,
     })
   } else {
     ElMessage({
@@ -211,6 +216,10 @@ async function runCase() {
     })
   }
 }
+
+// ============= 用例执行记录 ==============
+
+const runRecordDlg = ref(false)
 
 
 </script>

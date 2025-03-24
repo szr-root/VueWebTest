@@ -110,8 +110,8 @@
             v-model="cronInfo.date"
             type="datetime"
             placeholder="选择日期时间"
-            format="YYYY/MM/DD hh:mm:ss"
-            value-format="YYYY-MM-DD hh:mm:ss"
+            format="YYYY/MM/DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
         />
       </el-form-item>
 

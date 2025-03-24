@@ -40,7 +40,7 @@
         </draggable>
 
         <div class="info_line">
-          <div class="info">从用例集中拖拽到套件中</div>
+          <div class="info">从套件集中拖拽到任务中</div>
         </div>
 
       </template>

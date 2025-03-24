@@ -20,8 +20,8 @@
         >
         <el-table-column label="操作" width="510px">
           <template #default="scope">
-            <el-button icon="Promotion" type="primary">运行</el-button>
-            <el-button @click="editEnv(scope.row)" icon="View" plain>执行记录</el-button>
+            <el-button icon="Promotion" type="primary" @click="clickRun(scope.row.id)">运行</el-button>
+            <el-button  icon="View" plain>执行记录</el-button>
             <el-button @click="$router.push({name:'editSuites',params:{id:scope.row.id}})" icon="Edit" plain>编辑
             </el-button>
             <el-button @click="deleteSuite(scope.row.id)" icon="Delete" type="danger" plain>删除</el-button>
@@ -45,6 +45,33 @@
 
   </PageCard>
 
+
+  <el-dialog v-model="showRunDlg" title="运行套件" width="500" center>
+    <el-form :model="runParams">
+      <el-form-item label="测试环境" :label-width="formLabelWidth">
+        <el-select v-model="runParams.env_id" placeholder="选择运行的环境">
+          <el-option v-for="env in pstore.envList" :label="env.name" :value="env.id" :key="env.id"/>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="测试环境" :label-width="formLabelWidth">
+        <el-select v-model="runParams.browser_type" placeholder="选择浏览器">
+          <el-option label="chromium" value="chromium"/>
+          <el-option label="firebox" value="firebox"/>
+          <el-option label="webkit" value="webkit"/>
+        </el-select>
+      </el-form-item>
+
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showRunDlg = false">取 消</el-button>
+        <el-button type="primary" @click="runSuite">
+          确定
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 
 </template>
 
@@ -101,6 +128,42 @@ function deleteSuite(id) {
         }
       })
 }
+
+
+//====================== 运行套件 ======================
+const showRunDlg = ref(false)
+const runParams = ref({
+  env_id: null,
+  browser_type: "chromium",
+  suite_id: 1,
+})
+
+function clickRun(suite_id) {
+  showRunDlg.value = true
+  runParams.value.suite_id = suite_id
+}
+
+
+async function runSuite () {
+  const params = {
+    env_id: runParams.value.env_id,
+    browser_type: runParams.value.browser_type,
+  }
+  const response = await http.run.runSuite(runParams.value.suite_id, params)
+  if (response.status === 200) {
+    ElMessage({
+      type: 'success',
+      message: response.data.msg,
+    })
+  } else {
+    ElMessage({
+      type: 'error',
+      message: `启动执行失败`,
+    })
+  }
+  showRunDlg.value = false
+}
+
 
 
 </script>

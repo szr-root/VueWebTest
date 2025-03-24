@@ -50,6 +50,7 @@
     <!--弹框显示的编辑内容-->
     <div class="params_name">配置参数</div>
     <div v-for="(value,key) in editStep.params" :key="key" style="margin: 10px 0 0 0;">
+      <!--      todo 这里可能有bug，拖拽过来时，time从int变成了string-->
       <el-input v-model="editStep.params[key]">
         <template #prepend>{{ ParamsMap[key] }}</template>
       </el-input>
@@ -94,18 +95,22 @@ const localSteps = computed({
 })
 
 const dialogVisible = ref(false)
+const typedialog = ref('创建')
 const editStep = ref({})
 
 function handleAdd(event) {
   console.log(event)
   const newStep = event.item._underlying_vm_
   editStep.value = {...newStep}
+  console.log(editStep.value)
+  typedialog.value = '创建'
   dialogVisible.value = true;
 }
 
 
 function clickEdit(element) {
   editStep.value = {...element}
+  typedialog.value = '修改'
   dialogVisible.value = true
 }
 
@@ -116,6 +121,12 @@ function saveStep() {
   const index = localSteps.value.findIndex(item => {
     return item.id === newStep.id
   })
+
+  // 转换特定字段为整数类型
+  if (newStep.params.timeout !== undefined) {
+    newStep.params.timeout = parseInt(newStep.params.timeout, 10)
+  }
+
   steps[index] = editStep.value
   localSteps.value = steps
   //关闭弹窗
@@ -123,7 +134,8 @@ function saveStep() {
 }
 
 function onCancel(id) {
-  deleteStep(id)
+  if (typedialog.value === '创建')
+    deleteStep(id)
   dialogVisible.value = false
 }
 

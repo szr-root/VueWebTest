@@ -49,7 +49,9 @@ const activeName = ref(['1'])
 
 //自定义拖拽数据的结构
 function cloneData(data) {
+  console.log(data)
   return {
+    //todo 这里应该有bug，在实际使用中，拖拽时修改数据，但是时间却变成了string类型
     //给数据增加一个唯一的标识
     id: String(new Date().getTime()) + String(Math.random() * 1000).slice(0,2),
     desc: data.keyword,
