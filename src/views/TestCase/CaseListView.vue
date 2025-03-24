@@ -20,7 +20,7 @@
         <el-table-column label="操作" width="510px">
           <template #default="scope">
             <el-button icon="Promotion" type="primary" @click="clickRun(scope.row.id)">运行</el-button>
-            <el-button @click="editEnv(scope.row)" icon="View" plain>执行记录</el-button>
+            <el-button @click="showRunRecord(scope.row.id)" icon="View" plain>执行记录</el-button>
             <el-button @click="$router.push({name:'editCase',params:{id:scope.row.id}})" icon="Edit" plain>编辑
             </el-button>
             <el-button @click="copyCase(scope.row.id)" icon="DocumentCopy" plain>复制</el-button>
@@ -72,7 +72,7 @@
 
 <!--  用例执行记录弹窗-->
   <el-dialog v-model="runRecordDlg" title="用例运行记录" width="80%" center>
-
+    <CaseRecord :case_id="showRecordCaseId"></CaseRecord>
   </el-dialog>
 
 </template>
@@ -85,6 +85,7 @@ import {ProjectStore} from '@/stores/ProjectStore'
 import dataTools from "@/tools/dataTools.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CodeEdit from "@/components/CodeEdit.vue"
+import CaseRecord from '@/components/CaseRecord.vue'
 
 const pageConfig = reactive({
   total: 0,
@@ -220,6 +221,12 @@ async function runCase() {
 // ============= 用例执行记录 ==============
 
 const runRecordDlg = ref(false)
+const showRecordCaseId = ref(null)
+
+function showRunRecord(id){
+  showRecordCaseId.value = id
+  runRecordDlg.value = true
+}
 
 
 </script>
