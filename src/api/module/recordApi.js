@@ -27,6 +27,11 @@ export default {
         return request.get(`/api/run/cases/record/${record_id}`)
     },
 
+    //获取套件执行详情
+    getSuiteRecordDetail(record_id) {
+        return request.get(`/api/run/suites/record/${record_id}`)
+    },
+
 
 
 }

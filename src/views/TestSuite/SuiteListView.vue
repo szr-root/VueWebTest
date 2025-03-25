@@ -21,7 +21,7 @@
         <el-table-column label="操作" width="510px">
           <template #default="scope">
             <el-button icon="Promotion" type="primary" @click="clickRun(scope.row.id)">运行</el-button>
-            <el-button  icon="View" plain>执行记录</el-button>
+            <el-button @click="showRunRecord(scope.row.id)" icon="View" plain>执行记录</el-button>
             <el-button @click="$router.push({name:'editSuites',params:{id:scope.row.id}})" icon="Edit" plain>编辑
             </el-button>
             <el-button @click="deleteSuite(scope.row.id)" icon="Delete" type="danger" plain>删除</el-button>
@@ -73,6 +73,12 @@
     </template>
   </el-dialog>
 
+
+  <!--显示套件执行记录弹窗-->
+  <el-dialog v-model="runRecordDlg" title="套件执行记录" width="80%" center>
+      <SuiteRunRecord :suite_id="showRecordSuiteId"></SuiteRunRecord>
+  </el-dialog>
+
 </template>
 
 <script setup>
@@ -83,6 +89,7 @@ import {ProjectStore} from '@/stores/ProjectStore'
 import dataTools from "@/tools/dataTools.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CodeEdit from "@/components/CodeEdit.vue"
+import SuiteRunRecord from "./componets/SuiteRunRecord.vue"
 
 const pageConfig = reactive({
   total: 0,
@@ -144,7 +151,7 @@ function clickRun(suite_id) {
 }
 
 
-async function runSuite () {
+async function runSuite() {
   const params = {
     env_id: runParams.value.env_id,
     browser_type: runParams.value.browser_type,
@@ -162,6 +169,15 @@ async function runSuite () {
     })
   }
   showRunDlg.value = false
+}
+
+// ===================== 显示套件执行记录 ======================
+const runRecordDlg = ref(false)
+const showRecordSuiteId = ref(null)
+
+function showRunRecord(id) {
+  showRecordSuiteId.value = id
+  runRecordDlg.value = true
 }
 
 

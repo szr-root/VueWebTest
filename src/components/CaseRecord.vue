@@ -1,12 +1,12 @@
 <template>
   <el-table
       :data="CaseRecordList"
-      :border="parentBorder"
       style="width: 100%"
+      :row-class-name="tableRowClassName"
   >
     <el-table-column type="expand">
       <template #default="props">
-
+        <CaseReport :run_info="props.row.run_info"></CaseReport>
       </template>
     </el-table-column>
     <el-table-column label="用例名称">
@@ -24,11 +24,23 @@
     <el-table-column label="执行状态" prop="state"></el-table-column>
 
   </el-table>
+
+  <el-pagination
+      v-model:current-page="pageConfig.page"
+      v-model:page-size="pageConfig.size"
+      :page-sizes="[5, 10, 20, 50]"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pageConfig.total"
+      @size-change="getCaseRecord"
+      @current-change="getCaseRecord"
+  />
+
 </template>
 
 <script setup>
 import http from '@/api/index'
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
+import CaseReport from '@/components/CaseReport.vue'
 
 // 定义props用例获取用例id
 const props = defineProps({
@@ -37,6 +49,7 @@ const props = defineProps({
     default: 0
   }
 })
+
 
 const pageConfig = {
   page: 1,
@@ -57,11 +70,36 @@ async function getCaseRecord() {
   const response = await http.record.getCaseRecordList(params)
   if (response.status === 200) {
     CaseRecordList.value = response.data.data
-
+    pageConfig.total = response.data.total
   }
 }
 
+// 监听 case_id 的变化
+watch(
+    () => props.case_id,
+    (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        getCaseRecord()
+      }
+    }
+)
+
+
 getCaseRecord()
+
+
+function tableRowClassName({row, rowIndex}) {
+  if (row.run_info.state === 'success') {
+    return 'success-row'
+  } else if (row.run_info.state === 'failed') {
+    return 'warning-row'
+  } else if (row.run_info.state === 'error') {
+    return 'error-row'
+  } else {
+    return 'info-row'
+  }
+}
+
 
 </script>
 

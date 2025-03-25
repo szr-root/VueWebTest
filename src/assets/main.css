@@ -9,7 +9,7 @@ body,
 
 /*-------------------------------主题颜色修改----------------------------*/
 :root {
-    --el-tabs-header-height:30px;
+    --el-tabs-header-height: 30px;
     /* 主题色*/
     --primary-color: #42b983;
     --secondary-color: #34495e;
@@ -54,14 +54,14 @@ body,
 }
 
 
-
 /*----------------去掉标签页外边距--------------------------*/
-.el-tabs .el-tabs__header{
-	margin: 0;
+.el-tabs .el-tabs__header {
+    margin: 0;
 }
-.el-tabs .el-tabs__item{
-		padding: 8px;
-	}
+
+.el-tabs .el-tabs__item {
+    padding: 8px;
+}
 
 
 /*----------------虚拟进度条样式--------------------------*/
@@ -92,3 +92,18 @@ body,
 }
 
 
+.warning-row {
+    --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+
+.success-row {
+    --el-table-tr-bg-color: var(--el-color-success-light-9);
+}
+
+.error-row {
+  --el-table-tr-bg-color: var(--el-color-danger-light-9);
+}
+
+.info-row {
+  --el-table-tr-bg-color: var(--el-color-info-light-9);
+}

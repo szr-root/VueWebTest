@@ -143,6 +143,17 @@ const router = createRouter({
 						iconImg: new URL('@/assets/icon2/zhihangjilu.png',import.meta.url).href
 					}
 				},
+								{
+					path: '/record/suite/report/:id',
+					name: 'suiteReport',//套件报告页
+					component: () => import('../views/TestSuite/SuiteReportView.vue'),
+					meta:{
+						name:"编辑套件",
+						iconImg: new URL('@/assets/icon2/report.png',import.meta.url).href
+					}
+				},
+
+
 				{
 					path: '/devices/list',
 					name: 'devices',//设备管理页

@@ -70,7 +70,7 @@
     </template>
   </el-dialog>
 
-<!--  用例执行记录弹窗-->
+  <!--  用例执行记录弹窗-->
   <el-dialog v-model="runRecordDlg" title="用例运行记录" width="80%" center>
     <CaseRecord :case_id="showRecordCaseId"></CaseRecord>
   </el-dialog>
@@ -223,7 +223,7 @@ async function runCase() {
 const runRecordDlg = ref(false)
 const showRecordCaseId = ref(null)
 
-function showRunRecord(id){
+function showRunRecord(id) {
   showRecordCaseId.value = id
   runRecordDlg.value = true
 }
