@@ -32,6 +32,10 @@ export default {
         return request.get(`/api/run/suites/record/${record_id}`)
     },
 
+    //获取任务执行详情
+    getTaskRecordDetail(record_id) {
+        return request.get(`/api/run/tasks/record/${record_id}`)
+    },
 
 
 }

@@ -37,8 +37,8 @@
     </el-table-column>
 
   </el-table>
-
-  <el-pagination
+  <div class="page_box">
+      <el-pagination
       v-model:current-page="pageConfig.page"
       v-model:page-size="pageConfig.size"
       :page-sizes="[5, 10, 20, 50]"
@@ -47,17 +47,19 @@
       @size-change="getCaseRecord"
       @current-change="getCaseRecord"
   />
+  </div>
+
 
 </template>
 
 <script setup>
-import http from '@/api/index'
+import http from '@/api/index.js'
 import {ref, watch} from 'vue'
 import CaseReport from '@/components/CaseReport.vue'
 
 // 定义props用例获取用例id
 const props = defineProps({
-  case_id: {
+  suite_id: {
     type: Number,
     default: 0
   }
@@ -76,7 +78,7 @@ const CaseRecordList = ref([])
 // 获取当前用例执行记录
 async function getCaseRecord() {
   const params = {
-    case_id: props.case_id,
+    suite_records_id: props.suite_id,
     page: pageConfig.page,
     page_size: pageConfig.page_size
   }
@@ -89,7 +91,7 @@ async function getCaseRecord() {
 
 // 监听 case_id 的变化
 watch(
-    () => props.case_id,
+    () => props.suite_id,
     (newVal, oldVal) => {
       if (newVal !== oldVal) {
         getCaseRecord()
@@ -117,5 +119,8 @@ function tableRowClassName({row, rowIndex}) {
 </script>
 
 <style scoped>
+.page_box {
+  margin-top: 10px;
+}
 
 </style>

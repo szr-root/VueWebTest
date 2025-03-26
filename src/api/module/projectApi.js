@@ -23,7 +23,7 @@ export default {
 	
 	//============= 套件 ==========
 	getMoudleList(id){
-		return request.get('/api/pro/modules/',{
+		return request.get('/api/pro/modules',{
 			params:{
 				project_id:id
 			}

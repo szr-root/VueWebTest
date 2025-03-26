@@ -139,7 +139,7 @@ function editEnv(env) {
   EnvForm.id = env.id
   EnvForm.name = env.name
   EnvForm.host = env.host
-  EnvForm.global_vars = env.global_vars
+  EnvForm.global_vars =env.global_vars
 }
 
 async function updateEnv() {

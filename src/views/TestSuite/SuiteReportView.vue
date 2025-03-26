@@ -1,12 +1,12 @@
 <template>
 
-  <PageCard>
+  <PageCard v-if="SuiteReport">
     <template #title>
-      套件报告详情
+      【{{SuiteReport.suite_name}}】 套件报告详情
     </template>
 
     <template #main>
-      <el-row v-if="SuiteReport">
+      <el-row v-if="SuiteReport" :gutter="20">
 
         <!--左侧内容-->
         <el-col :span="12">
@@ -75,7 +75,12 @@
 
         <!--右侧内容-->
         <el-col :span="12">
-          <div> {{ SuiteReport }}</div>
+
+          <div class="title">
+            <el-tag type="primary">用例执行详情</el-tag>
+          </div>
+
+          <SuiteCaseRecord :suite_id="suite_record_id"></SuiteCaseRecord>
 
         </el-col>
 
@@ -97,6 +102,7 @@ import PageCard from '@/components/PageCard.vue'
 import {ProjectStore} from '@/stores/ProjectStore'
 import http from '@/api/index'
 import {ref} from 'vue'
+import SuiteCaseRecord from './componets/SuiteCaseRecord.vue'
 
 
 const router = useRouter()
@@ -138,6 +144,14 @@ getSuiteDetail()
     background-color: rgba(80, 77, 77, 0.91);
     padding: 20px;
     max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .el-row{
+    height: calc(100% - 40px);
+  }
+  .el-col{
+    height: 100%;
     overflow-y: auto;
   }
 

@@ -17,8 +17,10 @@
         <el-table-column label="操作" width="410px">
           <template #default="scope">
             <el-button icon="Promotion" type="primary" @click="clickRun(scope.row.id)">运行</el-button>
-            <el-button icon="View" type="primary">执行记录</el-button>
-            <el-button @click="$router.push({name:'editTask',params:{id:scope.row.id}})" icon="Edit" type="info" plain>编辑</el-button>
+            <el-button icon="View" type="primary" @click="clickView(scope.row.id)">执行记录</el-button>
+            <el-button @click="$router.push({name:'editTask',params:{id:scope.row.id}})" icon="Edit" type="info" plain>
+              编辑
+            </el-button>
             <el-button @click="deleteTask(scope.row.id)" icon="Delete" type="danger" plain>删除</el-button>
           </template>
         </el-table-column>
@@ -30,7 +32,6 @@
     </template>
 
   </PageCard>
-
 
 
   <el-dialog v-model="showRunDlg" title="运行测试任务" width="500" center>
@@ -60,6 +61,11 @@
     </template>
   </el-dialog>
 
+  <!-- 任务执行记录 -->
+  <el-dialog v-model="runRecordDlg" title="任务执行记录" width="80%" center>
+    <TaskRunRecord :task_id="showRecordSuiteId"></TaskRunRecord>
+  </el-dialog>
+
 </template>
 
 <script setup>
@@ -69,6 +75,8 @@ import PageCard from '@/components/PageCard.vue'
 import {ProjectStore} from '@/stores/ProjectStore'
 import dataTools from "@/tools/dataTools.js";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {useRouter} from 'vue-router'
+import TaskRunRecord from '../TestRecord/RecordListView.vue'
 
 const pstore = ProjectStore()
 
@@ -164,7 +172,15 @@ async function runTask() {
   showRunDlg.value = false
 }
 
+const router = useRouter()
 
+const showRecordTaskId = ref()
+
+//任务执行记录
+function clickView(task_id) {
+  showRecordTaskId.value = task_id
+  runRecordDlg.value = true
+}
 
 
 </script>

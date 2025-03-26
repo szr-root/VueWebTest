@@ -15,7 +15,7 @@
         <el-table-column prop="suites" label="模块中测试套件数量"/>
         <el-table-column label="操作" width="320px">
           <template #default="scope">
-            <el-button icon="View" type="primary">查看详情</el-button>
+            <el-button icon="View" type="primary" @click="clickView(scope.row.id)">查看详情</el-button>
             <el-button @click="editModule(scope.row.id)" icon="Edit" type="info" plain>编辑</el-button>
             <el-button @click="deleteModule(scope.row.id)" icon="Delete" type="danger" plain>删除</el-button>
           </template>
@@ -29,6 +29,32 @@
 
   </PageCard>
 
+
+  <el-drawer v-model="drawer" title="模块中的套件" size="40%">
+    <el-table
+        :data="ModuleSuiteList"
+        style="width: 100%;margin-top: 10px"
+        border
+
+    >
+      <el-table-column label="创建时间">
+        <template #default="scope">
+          {{ dataTools.rTime(scope.row.create_time) }}
+        </template>
+      </el-table-column>
+      >
+      <el-table-column label="套件名称" prop="name"/>
+      <el-table-column label="套件类型" prop="suite_type"/>
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button @click="$router.push({name:'editSuites',params:{id:scope.row.id}})" plain type="primary" icon="Edit">编辑套件</el-button>
+        </template>
+      </el-table-column>
+
+    </el-table>
+  </el-drawer>
+
+
 </template>
 
 <script setup>
@@ -38,10 +64,44 @@ import PageCard from '@/components/PageCard.vue'
 import {ProjectStore} from '@/stores/ProjectStore'
 import dataTools from "@/tools/dataTools.js";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {useRouter} from 'vue-router'
 
 const pstore = ProjectStore()
+const router = useRouter()
 //获取模块列表
 pstore.getModuleList()
+
+
+const drawer = ref(false)
+
+const ModuleSuiteList = ref([])
+
+
+const pageConfig = {
+  page: 1,
+  page_size: 10,
+  total: 0
+}
+
+
+function clickView(id) {
+  drawer.value = true
+  getSuiteList(id)
+}
+
+async function getSuiteList(id) {
+  const params = {
+    project_id: pstore.currentPro.id,
+    modules_id: id,
+    page: pageConfig.page,
+    size: pageConfig.size
+  }
+  const response = await http.testcase.getSuiteList(params)
+  if (response.status === 200) {
+    ModuleSuiteList.value = response.data.data
+    pageConfig.total = response.data.total
+  }
+}
 
 //创建模块
 function createModule() {
@@ -61,7 +121,7 @@ function createModule() {
             type: 'success',
             message: `创建成功`,
           })
-          pstore.getModuleList()
+         await pstore.getModuleList()
         } else {
           ElMessage({
             type: 'error',
@@ -125,6 +185,8 @@ function editModule(id) {
         })
       })
 }
+
+
 
 </script>
 

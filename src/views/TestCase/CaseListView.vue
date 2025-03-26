@@ -210,12 +210,14 @@ async function runCase() {
       type: 'success',
       message: response.data.msg,
     })
+
   } else {
     ElMessage({
       type: 'error',
       message: `启动执行失败`,
     })
   }
+  showRunDlg.value = false
 }
 
 // ============= 用例执行记录 ==============

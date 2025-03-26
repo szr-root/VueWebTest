@@ -5,7 +5,7 @@
     </template>
 
     <template #main>
-      <el-table :data="TaskRecordList" border style="width: 100%">
+      <el-table :data="TaskRecordList" border style="width: 100%" :row-class-name="tableRowClassName">
         <el-table-column prop="create_time" label="开始运行时间">
           <template #default="scope">
             {{ dataTools.rTime(scope.row.start_time) }}
@@ -23,7 +23,7 @@
 
         <el-table-column label="操作" width="220px">
           <template #default="scope">
-            <el-button icon="View" type="info" plain>查看测试报告</el-button>
+            <el-button icon="View" type="info" plain @click="toTaskReport(scope.row.id)">查看测试报告</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -53,10 +53,19 @@ import {ProjectStore} from '@/stores/ProjectStore'
 import dataTools from "@/tools/dataTools.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CodeEdit from "@/components/CodeEdit.vue"
+import {useRouter} from 'vue-router'
 
 const pstore = ProjectStore()
-
+const router = useRouter()
 const TaskRecordList = ref([])
+
+const props = defineProps({
+  task_id: {
+    type: Number,
+    default: 0
+  }
+})
+
 
 const pageConfig = reactive({
   total: 0,
@@ -78,7 +87,20 @@ async function getTaskRecordList() {
   }
 }
 
+function tableRowClassName({row, rowIndex}) {
+  if (row.status === '执行完成') {
+    return 'success-row'
+  } else{
+    return 'info-row'
+  }
+}
+
 getTaskRecordList()
+
+
+function toTaskReport(task_id){
+  router.push({name:'taskReport',params:{id:task_id}})
+}
 
 </script>
 
