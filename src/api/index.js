@@ -4,6 +4,7 @@ import testApi from '@/api/module/caseApi'
 import task from '@/api/module/taskAPi.js'
 import record from '@/api/module/recordAPi.js'
 import run from '@/api/module/runAPi.js'
+import device from '@/api/module/deviceApi.js'
 
 
 export default {
@@ -18,5 +19,7 @@ export default {
 	//记录相关接口
 	record:record,
 	//运行接口
-	run:run
+	run:run,
+	//设备接口
+	device:device
 }

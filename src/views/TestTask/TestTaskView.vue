@@ -63,7 +63,7 @@
 
   <!-- 任务执行记录 -->
   <el-dialog v-model="runRecordDlg" title="任务执行记录" width="80%" center>
-    <TaskRunRecord :task_id="showRecordSuiteId"></TaskRunRecord>
+    <TaskRunRecord :task_id="showRecordTaskId"></TaskRunRecord>
   </el-dialog>
 
 </template>
@@ -175,6 +175,7 @@ async function runTask() {
 const router = useRouter()
 
 const showRecordTaskId = ref()
+const runRecordDlg = ref(false)
 
 //任务执行记录
 function clickView(task_id) {

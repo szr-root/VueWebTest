@@ -179,7 +179,12 @@ const router = createRouter({
             path: '/users/register',
             name: 'register',
             component: () => import('../views/User/RegisterView.vue'),
-        }
+        },
+        {
+            path: '/node/device',
+            name: 'nodeDevice',//设备详情页
+            component: () => import('../views/Device/DeviceInfoView.vue'),
+        },
     ]
 })
 

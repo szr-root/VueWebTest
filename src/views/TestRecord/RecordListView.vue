@@ -47,7 +47,7 @@
 
 <script setup>
 import http from '@/api/index'
-import {ref, reactive} from 'vue'
+import {ref, reactive,watch} from 'vue'
 import PageCard from '@/components/PageCard.vue'
 import {ProjectStore} from '@/stores/ProjectStore'
 import dataTools from "@/tools/dataTools.js";
@@ -77,6 +77,7 @@ const pageConfig = reactive({
 async function getTaskRecordList() {
   const params = {
     project_id: pstore.currentPro.id,
+    task_id: props.task_id,
     page: pageConfig.page,
     size: pageConfig.size
   }
@@ -101,6 +102,15 @@ getTaskRecordList()
 function toTaskReport(task_id){
   router.push({name:'taskReport',params:{id:task_id}})
 }
+
+watch(
+    () => props.task_id,
+    (newVal, oldVal) => {
+      if (newVal !== oldVal) {
+        getTaskRecordList()
+      }
+    }
+)
 
 </script>
 
