@@ -12,7 +12,7 @@
           <!--文字-->
           <div>设备编号</div>
         </div>
-        <div class="info">{{route.query.id}}</div>
+        <div class="info">{{ route.query.id }}</div>
       </div>
 
       <div class="info_box">
@@ -24,7 +24,7 @@
           <!--文字-->
           <div>设备IP</div>
         </div>
-        <div class="info">{{route.query.ip}}</div>
+        <div class="info">{{ route.query.ip }}</div>
       </div>
 
       <div class="info_box">
@@ -36,7 +36,7 @@
           <!--文字-->
           <div>操作系统</div>
         </div>
-        <div class="info">{{route.query.system}}</div>
+        <div class="info">{{ route.query.system }}</div>
       </div>
 
       <div class="info_box">
@@ -48,7 +48,7 @@
           <!--文字-->
           <div>设备名称</div>
         </div>
-        <div class="info">{{route.query.name}}</div>
+        <div class="info">{{ route.query.name }}</div>
       </div>
 
     </div>
@@ -59,7 +59,8 @@
       <div class="left">
         <div class="title">屏幕监控(有界面的设备显示，无界面设备暂不支持设备屏幕同步)</div>
         <div class="device_box" v-loading="loading">
-          <img src="@/assets/images/login_bg.png" alt="loading">
+          <img :src="screenData" alt="设备画面" v-if="screenData">
+          <img src="@/assets/images/login_bg.png" alt="loading" v-else>
 
         </div>
       </div>
@@ -82,17 +83,35 @@
 
 <script setup>
 import {useRoute} from 'vue-router'
-import {ref} from 'vue'
+import {ref, onMounted} from 'vue'
 
 const loading = ref(true)
 
 const route = useRoute()
 
+let screenData = ref('')
 
 
 // 发送websoket请求和后端建立实时通信，订阅屏幕数据和日志数据，显示到页面
+function initWebsocket() {
+  const ws = new WebSocket(`ws://127.0.0.1:8000/api/node/ws/4444`)
+  ws.onmessage = handleMessage
+  ws.onclose = () => {
+    console.log('websocket连接成功')
+    loading.value = false
+  }
 
+}
 
+function handleMessage(event) {
+  const data = JSON.parse(event.data)
+  console.log(data)
+  screenData.value = 'data:image/webp;base64,' + data.data
+}
+
+onMounted(() => {
+  initWebsocket()
+})
 
 
 </script>
@@ -148,6 +167,7 @@ const route = useRoute()
         border-radius: 10px;
         border: 5px solid black;
         height: calc(100vh - 200px);
+
         img {
           max-width: 100%;
           height: auto;
