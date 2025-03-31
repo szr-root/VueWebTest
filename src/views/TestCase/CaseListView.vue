@@ -86,7 +86,9 @@ import dataTools from "@/tools/dataTools.js";
 import {ElMessage, ElMessageBox} from "element-plus";
 import CodeEdit from "@/components/CodeEdit.vue"
 import CaseRecord from '@/components/CaseRecord.vue'
+import {useRouter} from 'vue-router'
 
+const router = useRouter()
 const pageConfig = reactive({
   total: 0,
   size: 10,
@@ -211,14 +213,50 @@ async function runCase() {
       message: response.data.msg,
     })
 
+    const time_id = response.data.time_id
+    await getRunDevice(time_id, 0)
+
   } else {
     ElMessage({
       type: 'error',
       message: `启动执行失败`,
     })
   }
+
   showRunDlg.value = false
 }
+
+//===== 用例运行时跳转到设备页面=====
+async function getRunDevice(time_id, count) {
+  //重试，递归调用
+  count += 1
+  //根据time_id请求接口获取设备信息，
+  const response = await http.device.getDeviceInfo(time_id)
+  if (response.status === 200) {
+    const device = response.data
+    //跳转执行设备监控页面
+
+    //获取设备详情url
+    const route = router.resolve({
+      name: 'nodeDevice',
+      query: device
+    })
+    //新窗口打开设备详情页
+    window.open(route.href)
+  } else if (count <= 3) {
+    setTimeout(() => {
+      getRunDevice(time_id, count)
+    }, 1000)
+  } else {
+    ElMessage({
+      type: 'warning',
+      message: `当前暂无空闲设备，已加入到待执行队列中`,
+    })
+  }
+
+
+}
+
 
 // ============= 用例执行记录 ==============
 

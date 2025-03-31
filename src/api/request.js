@@ -1,9 +1,10 @@
 import axios from "axios";
 import {UserStore} from '@/stores/UserStore'
+import config from '@/datas/config'
 
 //创建axios请求对象
 const request = axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: config.baseUrl,
     timeout: 10000,
     headers: {
         'Content-Type': "application/json"
@@ -28,16 +29,16 @@ request.interceptors.request.use(function (config) {
     // }
 
     if (config && typeof config.url === 'string') {
-    const allowedPaths = [
-        '/api/users/login',
-        '/api/users/register',
-        '/api/users/verify',
-        '/api/users/refresh'
-    ];
-    if (allowedPaths.includes(config.url)) {
-        return config;
+        const allowedPaths = [
+            '/api/users/login',
+            '/api/users/register',
+            '/api/users/verify',
+            '/api/users/refresh'
+        ];
+        if (allowedPaths.includes(config.url)) {
+            return config;
+        }
     }
-}
 
     const uStore = UserStore()
     if (uStore.token) {

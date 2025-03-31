@@ -68,7 +68,7 @@
       <div class="right">
         <div class="title">实时日志</div>
         <div class="log_box">
-
+          <div v-for="(item,index) in logs" :key="index"> {{item}}</div>
         </div>
 
       </div>
@@ -83,7 +83,8 @@
 
 <script setup>
 import {useRoute} from 'vue-router'
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, watch} from 'vue'
+import config from '@/datas/config'
 
 const loading = ref(true)
 
@@ -91,28 +92,50 @@ const route = useRoute()
 
 let screenData = ref('')
 
-
 // 发送websoket请求和后端建立实时通信，订阅屏幕数据和日志数据，显示到页面
 function initWebsocket() {
-  const ws = new WebSocket(`ws://127.0.0.1:8000/api/node/ws/4444`)
+  const url = config.wsUrl + '/api/node/ws/' + route.query.id
+  console.log(url)
+  const ws = new WebSocket(url)
   ws.onmessage = handleMessage
   ws.onclose = () => {
-    console.log('websocket连接成功')
-    loading.value = false
+    console.log('websocket断开连接')
+    loading.value = true
   }
 
 }
 
+
+let logs = ref([])
+
 function handleMessage(event) {
   const data = JSON.parse(event.data)
-  console.log(data)
-  screenData.value = 'data:image/webp;base64,' + data.data
+  loading.value = false
+  // console.log(data)
+  //判断返回数据类型
+  if (data.type === 'screen') {
+    screenData.value = 'data:image/webp;base64,' + data.data
+  } else if (data.type === 'log') {
+    //返回日志
+    logs.value.push(data.data)
+  }
+
+
 }
 
 onMounted(() => {
   initWebsocket()
 })
 
+//设备id发生变化，重新初始化链接
+watch(
+    () => route.query.id,
+    (newVal, oldVal) => {
+      logs.value = []
+      screenData.value = ''
+      initWebsocket()
+    }
+)
 
 </script>
 
@@ -187,6 +210,7 @@ onMounted(() => {
         border: 5px solid black;
         background-color: #424242;
         border-radius: 10px;
+        color: white;
       }
     }
 
