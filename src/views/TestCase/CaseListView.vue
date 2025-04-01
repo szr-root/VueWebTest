@@ -206,6 +206,7 @@ async function runCase() {
     env_id: runParams.value.env_id,
     browser_type: runParams.value.browser_type,
   }
+  showRunDlg.value = false
   const response = await http.run.runCase(runParams.value.case_id, params)
   if (response.status === 200) {
     ElMessage({
@@ -223,7 +224,7 @@ async function runCase() {
     })
   }
 
-  showRunDlg.value = false
+
 }
 
 //===== 用例运行时跳转到设备页面=====

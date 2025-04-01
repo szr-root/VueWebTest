@@ -47,7 +47,9 @@
       <el-table-column label="套件类型" prop="suite_type"/>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button @click="$router.push({name:'editSuites',params:{id:scope.row.id}})" plain type="primary" icon="Edit">编辑套件</el-button>
+          <el-button @click="$router.push({name:'editSuites',params:{id:scope.row.id}})" plain type="primary"
+                     icon="Edit">编辑套件
+          </el-button>
         </template>
       </el-table-column>
 
@@ -68,8 +70,11 @@ import {useRouter} from 'vue-router'
 
 const pstore = ProjectStore()
 const router = useRouter()
+
 //获取模块列表
 pstore.getModuleList()
+pstore.getEnvList()
+pstore.getTaskList()
 
 
 const drawer = ref(false)
@@ -121,7 +126,7 @@ function createModule() {
             type: 'success',
             message: `创建成功`,
           })
-         await pstore.getModuleList()
+          await pstore.getModuleList()
         } else {
           ElMessage({
             type: 'error',
@@ -185,7 +190,6 @@ function editModule(id) {
         })
       })
 }
-
 
 
 </script>

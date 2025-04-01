@@ -66,7 +66,7 @@
 
     <!-- 截图 -->
     <div class="title">执行结果截图</div>
-    <img v-if="run_info.img" :src="run_info.img" alt="执行结果">
+    <img v-if="run_info.img" :src="run_info.img" style="border: 3px solid black" alt="执行结果">
   </div>
 
 
